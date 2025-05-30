@@ -1,0 +1,59 @@
+
+extends layout
+
+block content
+  .row
+    .col-12
+      .d-flex.justify-content-between.align-items-center.mb-4
+        h1.display-4
+          i.bi.bi-list-ul.me-3
+          | Edições do Festival Eurovisão
+        .badge.bg-info.fs-6= `${edicoes.length} edições`
+  
+  .row
+    .col-12
+      if edicoes && edicoes.length > 0
+        .card.shadow-sm
+          .card-body.p-0
+            .table-responsive
+              table.table.table-hover.mb-0
+                thead.table-primary
+                  tr
+                    th.text-center
+                      i.bi.bi-calendar.me-1
+                      | Ano
+                    th
+                      i.bi.bi-building.me-1
+                      | País Organizador
+                    th
+                      i.bi.bi-trophy.me-1
+                      | País Vencedor
+                    th.text-center
+                      i.bi.bi-eye.me-1
+                      | Ações
+                tbody
+                  each edicao in edicoes
+                    tr
+                      td.text-center.fw-bold
+                        a.text-decoration-none(href=`/${edicao._id}`)= edicao.anoEdicao
+                      td
+                        a.text-decoration-none(href=`/paises/${edicao.organizacao}`)
+                          i.bi.bi-geo-alt.me-1
+                          = edicao.organizacao
+                      td
+                        if edicao.vencedor
+                          a.text-decoration-none(href=`/paises/${edicao.vencedor}`)
+                            i.bi.bi-award.me-1.text-warning
+                            = edicao.vencedor
+                        else
+                          span.text-muted
+                            i.bi.bi-dash
+                            | Não definido
+                      td.text-center
+                        a.btn.btn-outline-primary.btn-sm(href=`/${edicao._id}`)
+                          i.bi.bi-eye.me-1
+                          | Ver Detalhes
+      else
+        .alert.alert-warning.text-center
+          i.bi.bi-exclamation-triangle.me-2
+          | Nenhuma edição encontrada. Verifique se a API está rodando na porta 25000.

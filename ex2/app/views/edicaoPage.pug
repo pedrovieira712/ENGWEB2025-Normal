@@ -1,0 +1,91 @@
+extends layout
+
+block content
+  .row
+    .col-12
+      nav(aria-label='breadcrumb')
+        ol.breadcrumb
+          li.breadcrumb-item
+            a(href='/') Início
+          li.breadcrumb-item.active(aria-current='page')= `Eurovisão ${edicao.anoEdicao}`
+  
+  .row
+    .col-12
+      .card.shadow-sm.mb-4
+        .card-header.bg-primary.text-white
+          h1.card-title.mb-0
+            i.bi.bi-calendar-event.me-2
+            = `Festival Eurovisão ${edicao.anoEdicao}`
+        .card-body
+          .row
+            .col-md-6
+              h5
+                i.bi.bi-building.me-2.text-primary
+                | País Organizador
+              p.fs-5
+                a.text-decoration-none(href=`/paises/${edicao.organizacao}`)= edicao.organizacao
+            .col-md-6
+              h5
+                i.bi.bi-trophy.me-2.text-warning
+                | País Vencedor
+              if edicao.vencedor
+                p.fs-5
+                  a.text-decoration-none(href=`/paises/${edicao.vencedor}`)
+                    span.badge.badge-winner.fs-6= edicao.vencedor
+              else
+                p.text-muted Não definido
+  
+  .row
+    .col-12
+      .card.shadow-sm
+        .card-header.bg-secondary.text-white
+          h3.card-title.mb-0
+            i.bi.bi-music-note-list.me-2
+            = `Músicas Participantes (${edicao.musicas ? edicao.musicas.length : 0})`
+        .card-body.p-0
+          if edicao.musicas && edicao.musicas.length > 0
+            .table-responsive
+              table.table.table-hover.mb-0
+                thead.table-light
+                  tr
+                    th
+                      i.bi.bi-music-note.me-1
+                      | Música
+                    th
+                      i.bi.bi-person.me-1
+                      | Intérprete
+                    th
+                      i.bi.bi-geo-alt.me-1
+                      | País
+                    th.text-center
+                      i.bi.bi-link.me-1
+                      | Link
+                tbody
+                  each musica in edicao.musicas
+                    tr(class=musica.pais === edicao.vencedor ? 'table-warning' : '')
+                      td.fw-bold= musica.titulo
+                      td= musica.interprete
+                      td
+                        a.text-decoration-none(href=`/paises/${musica.pais}`)= musica.pais
+                        if musica.pais === edicao.vencedor
+                          span.badge.bg-warning.text-dark.ms-2
+                            i.bi.bi-trophy
+                            | Vencedor
+                      td.text-center
+                        if musica.link
+                          a.btn.btn-outline-danger.btn-sm(href=musica.link, target='_blank')
+                            i.bi.bi-play-circle.me-1
+                            | YouTube
+                        else
+                          span.text-muted
+                            i.bi.bi-dash
+          else
+            .alert.alert-info.m-3
+              i.bi.bi-info-circle.me-2
+              | Nenhuma música encontrada para esta edição.
+  
+  .row.mt-4
+    .col-12.text-center
+      a.btn.btn-primary.btn-lg(href='/')
+        i.bi.bi-arrow-left.me-2
+        | Voltar à Lista de Edições

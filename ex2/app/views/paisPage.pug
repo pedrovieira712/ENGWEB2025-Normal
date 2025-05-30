@@ -1,0 +1,87 @@
+extends layout
+
+block content
+  .row
+    .col-12
+      nav(aria-label='breadcrumb')
+        ol.breadcrumb
+          li.breadcrumb-item
+            a(href='/') Início
+          li.breadcrumb-item.active(aria-current='page')= pais.nome
+  
+  .row
+    .col-12
+      .card.shadow-sm.mb-4
+        .card-header.bg-success.text-white
+          h1.card-title.mb-0
+            i.bi.bi-geo-alt.me-2
+            = `País: ${pais.nome}`
+  
+  .row
+    .col-md-6
+      .card.shadow-sm.h-100
+        .card-header.bg-primary.text-white
+          h3.card-title.mb-0
+            i.bi.bi-music-note-list.me-2
+            = `Participações (${pais.participacoes ? pais.participacoes.length : 0})`
+        .card-body.p-0
+          if pais.participacoes && pais.participacoes.length > 0
+            .table-responsive
+              table.table.table-hover.mb-0
+                thead.table-light
+                  tr
+                    th.text-center Ano
+                    th Música
+                    th Intérprete
+                    th.text-center Resultado
+                tbody
+                  each participacao in pais.participacoes
+                    tr(class=participacao.venceu ? 'table-warning' : '')
+                      td.text-center
+                        a.text-decoration-none(href=`/${participacao.id}`)= participacao.ano
+                      td.fw-bold= participacao.musica
+                      td= participacao.interprete
+                      td.text-center
+                        if participacao.venceu
+                          span.badge.bg-warning.text-dark
+                            i.bi.bi-trophy.me-1
+                            | Venceu
+                        else
+                          span.badge.bg-secondary Participou
+          else
+            .alert.alert-info.m-3
+              i.bi.bi-info-circle.me-2
+              | Este país nunca participou no festival.
+    
+    .col-md-6
+      .card.shadow-sm.h-100
+        .card-header.bg-warning.text-dark
+          h3.card-title.mb-0
+            i.bi.bi-building.me-2
+            = `Organizações (${pais.organizacoes ? pais.organizacoes.length : 0})`
+        .card-body.p-0
+          if pais.organizacoes && pais.organizacoes.length > 0
+            .table-responsive
+              table.table.table-hover.mb-0
+                thead.table-light
+                  tr
+                    th.text-center Ano
+                    th Edição
+                tbody
+                  each organizacao in pais.organizacoes
+                    tr
+                      td.text-center.fw-bold= organizacao.ano
+                      td
+                        a.text-decoration-none(href=`/${organizacao.id}`)
+                          i.bi.bi-calendar-event.me-1
+                          = `Eurovisão ${organizacao.ano}`
+          else
+            .alert.alert-info.m-3
+              i.bi.bi-info-circle.me-2
+              | Este país nunca organizou o festival.
+  
+  .row.mt-4
+    .col-12.text-center
+      a.btn.btn-primary.btn-lg(href='/')
+        i.bi.bi-arrow-left.me-2
+        | Voltar à Lista de Edições
